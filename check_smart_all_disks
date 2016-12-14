@@ -1,7 +1,6 @@
 #!/bin/bash
 # $Id: check_smart_all_disks,v 1.23 2014/03/10 10:48:06 oernii Exp $
-
-[[ $(id -u) -ne 0 ]] && echo "$0 needs to run as root to read SMART data." && exit 3
+# Add 'nagios ALL=(root)NOPASSWD:/usr/sbin/smartctl' to sudoers file for this to work.
 
 DEVS=`find /dev/disk/by-id/ -iname '*ata*' -and -not -iname '*part*' -and -not -iname '*QEMU_DVD-ROM*' -ls | gawk  '{print $13}' | cut -f3 -d/ | sed -e 's/\(.*\)/\/dev\/\1/'|sort -u`
 DEVS=`echo $DEVS`
@@ -30,7 +29,7 @@ fi
 OUT=`mktemp`
 ERRORDEVICES=''
 NAGIOS_OUTPUT=`mktemp`
-SMARTCTL=smartctl
+SMARTCTL="sudo smartctl"
 
 function check_ata_error_count()
 {
