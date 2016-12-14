@@ -1,6 +1,6 @@
 #!/bin/bash
 # $Id: check_smart_all_disks,v 1.23 2014/03/10 10:48:06 oernii Exp $
-# Add 'nagios ALL=(root)NOPASSWD:/usr/sbin/smartctl' to sudoers file for this to work.
+# Add 'nagios ALL=(root)NOPASSWD:/usr/sbin/smartctl' and 'Defaults:nagios !requiretty' (if needed) to sudoers
 
 DEVS=`find /dev/disk/by-id/ -iname '*ata*' -and -not -iname '*part*' -and -not -iname '*QEMU_DVD-ROM*' -ls | gawk  '{print $13}' | cut -f3 -d/ | sed -e 's/\(.*\)/\/dev\/\1/'|sort -u`
 DEVS=`echo $DEVS`
